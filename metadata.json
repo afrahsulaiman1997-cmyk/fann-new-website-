@@ -1,5 +1,8 @@
 {
   "name": "fann new website ",
   "description": "A world-class website for FANN, a premier exhibition, events, and interior design company based in Dubai, UAE. The site features an innovative FANN Studio, a comprehensive UAE events calendar, and an immersive portfolio, setting a new industry standard.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

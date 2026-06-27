@@ -5,7 +5,7 @@ import ServicePageLayout from '../../components/ServicePageLayout';
 import FaqAccordion from '../../components/FaqAccordion';
 import { Link } from 'react-router-dom';
 
-const pageTitle = "Custom Exhibition Stand Builders Dubai";
+const pageTitle = "Custom Exhibition Stands Dubai";
 const heroImage = "https://images.pexels.com/photos/8112165/pexels-photo-8112165.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
 
 const breadcrumbs = [
@@ -73,14 +73,14 @@ const CustomStandsPage: React.FC = () => {
   return (
     <AnimatedPage>
       <SEO
-        title="Top Custom Exhibition Stand Builders in Dubai & UAE | FANN Design & Build"
-        description="FANN is the leading custom exhibition stand builder in Dubai, UAE. We offer bespoke design, in-house fabrication, and turnkey services for major events like GITEX, Arab Health, and Gulfood. Get a free quote."},{find:
+        title="Custom Exhibition Stands Dubai | Bespoke Design & Build | FANN"
+        description="Award-winning custom exhibition stand design and build in Dubai. From 3D concept to final installation at DWTC. DMCC licensed. Get your free quote today."
         schema={schema}
       />
       <ServicePageLayout
         heroImage={heroImage}
         heroAltText="A stunning, large-scale custom exhibition stand at a major trade show in Dubai."
-        pageTitle="Custom Exhibition Stand Builders & Design in Dubai"
+        pageTitle="Custom Exhibition Stand Design & Build in Dubai"
         pageDescription="Crafting unforgettable brand experiences with bespoke exhibition stands that captivate, engage, and deliver results."
         breadcrumbs={breadcrumbs}
       >

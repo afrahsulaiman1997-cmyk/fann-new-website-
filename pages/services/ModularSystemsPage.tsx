@@ -73,14 +73,14 @@ const ModularSystemsPage: React.FC = () => {
   return (
     <AnimatedPage>
       <SEO
-        title="Reusable Modular Exhibition Stands Dubai | Cost-Effective Systems UAE"
-        description="FANN provides cost-effective, reusable modular exhibition systems in Dubai & UAE. Perfect for multi-show exhibitors, offering fast setup, full customization, and storage."},{find:
+        title="Modular Exhibition Systems Dubai | Reusable & Scalable | FANN"
+        description="High-quality modular exhibition systems in Dubai. Cost-effective, reusable, and scalable solutions for any event. Fast setup and customization available."
         schema={schema}
       />
       <ServicePageLayout
         heroImage={heroImage}
         heroAltText="A clean and modern modular exhibition stand with vibrant graphics."
-        pageTitle="Reusable Modular Exhibition Stands & Systems in Dubai"
+        pageTitle="Modular Exhibition Systems for Dubai & UAE Events"
         pageDescription="Flexible, sustainable, and cost-effective solutions for the modern exhibitor. Maximize your impact across multiple events with a single, scalable system."
         breadcrumbs={breadcrumbs}
       >

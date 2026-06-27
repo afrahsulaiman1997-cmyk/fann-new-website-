@@ -1,6 +1,19 @@
 
 import { Project, Event, Testimonial, NavLink } from './types';
 
+// New interface for Blog Content
+export interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string; // Markdown supported
+  author: string;
+  date: string;
+  image: string;
+  category: string;
+  slug: string;
+}
+
 export const navLinks: NavLink[] = [
     { name: 'Services', path: '/services' },
     { name: 'Portfolio', path: '/portfolio' },
@@ -23,6 +36,28 @@ export const navLinks: NavLink[] = [
             { name: 'Contact Us', path: '/contact' },
         ] 
     },
+];
+
+export const blogPosts: BlogPost[] = [
+  {
+    id: '1',
+    slug: 'how-to-choose-exhibition-stand-builder-dubai',
+    title: 'How to Choose the Right Exhibition Stand Builder in Dubai',
+    author: 'FANN Editorial',
+    date: 'Oct 24, 2025',
+    category: 'Guides',
+    image: 'https://images.pexels.com/photos/2608517/pexels-photo-2608517.jpeg?auto=compress&cs=tinysrgb&w=800',
+    excerpt: 'Finding a reliable contractor for GITEX or Gulfood can be daunting. We break down the top 5 things to look for in a Dubai partner.',
+    content: `
+      ## Why Experience in Dubai Venues Matters
+      Dubai World Trade Centre (DWTC) and ADNEC have specific regulations. A local builder understands the paperwork...
+      
+      ## Key Checklist for Your Builder
+      1. **In-house production:** Do they have their own workshop?
+      2. **Portfolio:** Check their recent work at major shows.
+      3. **Logistics:** How do they handle transport and installation?
+    `
+  }
 ];
 
 export const supportedLanguages = [
@@ -714,7 +749,6 @@ export const projects: Project[] = [
 export const regionalEvents: Event[] = [
   { name: "INTERMOBILITY EXPO", date: "Nov 2025 (TBC)", venue: "Dubai Exhibition Centre", country: "UAE", industry: "Logistics", description: "INTERMOBILITY EXPO is the event for the transport industry to meet their peers and leading policy and decision makers from the Middle Esat Region. Connecting Infrastructure for a Sustanable Mobility Ecosystem" },
   { name: "META CINEMA FORUM", date: "Nov 01-02, 2025", venue: "Dubai", country: "UAE", industry: "Entertainment", description: "META Cinema Forum is the premier cinema convention spanning across the Middle East, Africa, and Turkey. The Forum brings together a diverse group of industry leaders, filmmakers, distributors, exhibitors, technology providers..." },
-  // ... (rest of the events would remain unchanged if they were present in the original full file)
 ];
 
 export const testimonials: Testimonial[] = [

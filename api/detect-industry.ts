@@ -23,7 +23,7 @@ export default async function handler(req: any, res: any) {
         const ai = new GoogleGenAI({ apiKey });
 
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-3.5-flash",
             contents: `Identify the primary industry associated with the trade show or event named "${eventName}". Return ONLY a single short string (e.g. "Technology", "Healthcare", "Automotive", "Food & Beverage"). If you are unsure or it's generic, return "General". Do not include punctuation.`,
         });
 

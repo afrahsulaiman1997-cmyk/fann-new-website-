@@ -82,7 +82,7 @@ export default async function handler(req: any, res: any) {
         `;
 
         const textResponse = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-3.5-flash",
             contents: { parts: [{ text: textPrompt }] },
             config: {
                 tools: [{ googleSearch: {} }], 
@@ -121,7 +121,7 @@ export default async function handler(req: any, res: any) {
 
             try {
                 const resp = await ai.models.generateContent({
-                    model: 'gemini-3-pro-image-preview',
+                    model: 'gemini-3.1-flash-image',
                     contents: { parts: [{ text: imagePrompt }] },
                     config: {
                         imageConfig: { aspectRatio: "16:9", imageSize: "1K" }

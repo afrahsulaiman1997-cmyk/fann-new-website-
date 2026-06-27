@@ -22,7 +22,7 @@ export default async function handler(req: any, res: any) {
         const ai = new GoogleGenAI({ apiKey });
 
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-3.5-flash',
             contents: { parts: [
                 { inlineData: { mimeType, data: image } },
                 { text: "Analyze the attached logo to identify the 3-5 most dominant brand colors and return them as an array of HEX codes." }

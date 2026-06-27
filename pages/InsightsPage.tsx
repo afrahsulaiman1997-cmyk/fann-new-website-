@@ -2,10 +2,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, BookOpen, BrainCircuit, Building2, Globe, Lightbulb, Loader2, Rocket, ServerCrash, Sparkles, Store, TrendingUp, AlertTriangle } from 'lucide-react';
+import { 
+    ArrowLeft, BookOpen, BrainCircuit, Building2, Globe, Lightbulb, 
+    Loader2, Rocket, ServerCrash, Sparkles, Store, TrendingUp, AlertTriangle,
+    Calendar, User, Newspaper
+} from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
 import SEO from '../components/SEO';
 import { useApiKey } from '../context/ApiKeyProvider';
+import { blogPosts } from '../constants';
 
 interface InsightTopic {
     title: string;
@@ -48,46 +53,6 @@ const insightTopics: InsightTopic[] = [
         icon: Lightbulb,
         image: 'https://images.pexels.com/photos/1918291/pexels-photo-1918291.jpeg?auto=compress&cs=tinysrgb&w=600&q=75'
     },
-    {
-        title: "Maximizing ROI at DWTC & Riyadh Front",
-        slug: slugify("Maximizing ROI at DWTC & Riyadh Front"),
-        prompt: "Write a strategic guide for international exhibitors on maximizing their return on investment at premier Middle East venues: the Dubai World Trade Centre (DWTC) and the Riyadh Exhibition and Convention Center (Riyadh Front). Cover pre-show marketing, stand design strategies for high traffic, and lead capture tactics specific to these locations.",
-        category: 'Exhibitions',
-        icon: TrendingUp,
-        image: 'https://images.pexels.com/photos/8111364/pexels-photo-8111364.jpeg?auto=compress&cs=tinysrgb&w=600&q=75'
-    },
-    {
-        title: "Luxury Retail Design: Dubai Mall vs. Via Riyadh",
-        slug: slugify("Luxury Retail Design: Dubai Mall vs. Via Riyadh"),
-        prompt: "Write a comparative analysis for a luxury design blog on the prevailing interior design trends for flagship retail stores in Dubai Mall versus the new luxury destination, Via Riyadh. Discuss customer experience, material palettes, and technology integration in these two distinct luxury hubs.",
-        category: 'Interior Design',
-        icon: Store,
-        image: 'https://images.pexels.com/photos/1321943/pexels-photo-1321943.jpeg?auto=compress&cs=tinysrgb&w=600&q=75'
-    },
-    {
-        title: "The Rise of 'Giga-Project' Launch Events in KSA",
-        slug: slugify("The Rise of 'Giga-Project' Launch Events in KSA"),
-        prompt: "Write an article for an event industry magazine about the emerging trend of large-scale, immersive launch events for Saudi Arabia's 'Giga-Projects' (e.g., NEOM, Red Sea Project). Discuss the scale, production complexity, and global impact of these brand experiences.",
-        category: 'Events',
-        icon: Rocket,
-        image: 'https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=600&q=75'
-    },
-    {
-        title: "Integrating Arabic Culture into Modern Design",
-        slug: slugify("Integrating Arabic Culture into Modern Design"),
-        prompt: "For a design and architecture blog, write a piece on how to tastefully integrate traditional Arabic and Islamic design motifs (like geometry, calligraphy, and mashrabiya patterns) into modern, minimalist exhibition stands and corporate interiors for the Gulf market. Provide examples of successful fusion.",
-        category: 'Exhibitions',
-        icon: Globe,
-        image: 'https://images.pexels.com/photos/8134937/pexels-photo-8134937.jpeg?auto=compress&cs=tinysrgb&w=600&q=75'
-    },
-    {
-        title: "The Future of Hybrid Events in the UAE",
-        slug: slugify("The Future of Hybrid Events in the UAE"),
-        prompt: "Write a thought-leadership article for an events company on the future of hybrid events in the UAE. Discuss strategies for blending physical and virtual experiences for major Dubai-based conferences, and how to create equal value for in-person and remote attendees.",
-        category: 'Events',
-        icon: Sparkles,
-        image: 'https://images.pexels.com/photos/7680128/pexels-photo-7680128.jpeg?auto=compress&cs=tinysrgb&w=600&q=75'
-    },
 ];
 
 const blogSchema = {
@@ -105,21 +70,19 @@ const blogSchema = {
     }
 };
 
-// Simple markdown-to-HTML parser
 const formatContent = (text: string) => {
     let html = text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\n(\s*#+\s.*)/g, (match, p1) => { // Headers
+        .replace(/\n(\s*#+\s.*)/g, (match, p1) => { 
             const level = p1.match(/#+/)[0].length;
             const content = p1.replace(/#+\s/, '');
             return `</p><h${level}>${content}</h${level}><p>`;
         })
-        .replace(/\n\s*\n/g, '</p><p>') // Paragraphs
-        .replace(/\n\s*-\s/g, '</li><li>') // List items
+        .replace(/\n\s*\n/g, '</p><p>') 
+        .replace(/\n\s*-\s/g, '</li><li>') 
         .replace(/<li>/g, '<ul><li>')
         .replace(/<\/li><\/ul>/g, '</li></ul>');
 
-    // Close any open tags
     if ((html.match(/<ul>/g) || []).length > (html.match(/<\/ul>/g) || []).length) {
         html += '</ul>';
     }
@@ -130,55 +93,29 @@ const formatContent = (text: string) => {
 const InsightsPage: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const topicSlug = searchParams.get('topic');
-
-    const selectedTopic = useMemo(() => {
-        if (!topicSlug) return null;
-        return insightTopics.find(t => t.slug === topicSlug) || null;
-    }, [topicSlug]);
+    const blogSlug = searchParams.get('article');
 
     const [generatedArticle, setGeneratedArticle] = useState<Article | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const { ensureApiKey, handleApiError, error, clearError } = useApiKey();
     const [schema, setSchema] = useState<object>(blogSchema);
 
+    // Filter current selected items
+    const selectedTopic = useMemo(() => insightTopics.find(t => t.slug === topicSlug) || null, [topicSlug]);
+    const selectedBlog = useMemo(() => blogPosts.find(b => b.slug === blogSlug) || null, [blogSlug]);
+
     const generateArticle = async (topic: InsightTopic) => {
         clearError();
         if (!await ensureApiKey()) return;
-
         setIsLoading(true);
-        setGeneratedArticle(null);
-
         try {
             const response = await fetch('/api/generate-insights', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt: topic.prompt }),
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to generate article.');
-            }
-
             const data = await response.json();
             setGeneratedArticle(data);
-            setSchema({
-                "@context": "https://schema.org",
-                "@type": "Article",
-                "headline": topic.title,
-                "description": `A FANN-powered analysis on ${topic.title}. Discover the latest trends in the GCC's exhibition, events, and interior design industries with FANN.`,
-                "image": topic.image,
-                "author": { "@type": "Organization", "name": "FANN" },
-                "publisher": {
-                    "@type": "Organization",
-                    "name": "FANN",
-                    "logo": { "@type": "ImageObject", "url": "https://fann.ae/favicon.svg" }
-                },
-                "mainEntityOfPage": `https://fann.ae/insights?topic=${topic.slug}`,
-                "datePublished": new Date().toISOString(),
-                "articleBody": data.content
-            });
-
         } catch (e: any) {
             handleApiError(e);
         } finally {
@@ -187,135 +124,111 @@ const InsightsPage: React.FC = () => {
     };
 
     useEffect(() => {
-        if (selectedTopic && !generatedArticle && !isLoading && !error) {
+        if (selectedTopic && !generatedArticle && !isLoading) {
             generateArticle(selectedTopic);
         }
-        if (!selectedTopic) {
+        if (!selectedTopic && !selectedBlog) {
             setGeneratedArticle(null);
-            clearError();
-            setSchema(blogSchema);
         }
-    }, [selectedTopic]);
-
-    const handleTopicSelect = (topic: InsightTopic) => {
-        setSearchParams({ topic: topic.slug });
-    };
-    
-    const handleBack = () => {
-        setSearchParams({});
-    };
+    }, [selectedTopic, selectedBlog]);
 
     const renderTopicSelection = () => (
         <div className="text-center">
-            <h1 className="text-5xl font-serif font-bold text-fann-gold mb-4">FANN Intelligence Hub</h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-6">
-                Select a topic for an expert-driven analysis of key industry trends.
+            <h1 className="text-5xl font-serif font-bold text-fann-gold mb-4">Intelligence Hub</h1>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-12">
+                Expert analysis and AI-powered insights for the UAE design market.
             </p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-fann-gold/10 border border-fann-gold/20 text-fann-gold/80 text-xs font-semibold mb-12">
-                <AlertTriangle size={14} />
-                <span>Beta Preview: Intelligence reports are compiled by AI using real-time data.</span>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-                {insightTopics.map((topic, index) => (
-                    <motion.div
-                        key={topic.title}
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        onClick={() => handleTopicSelect(topic)}
-                        className="h-96 block relative group overflow-hidden rounded-lg cursor-pointer border-2 border-fann-gold/20 hover:border-fann-gold transition-all duration-300"
-                    >
-                        <picture>
-                            <source srcSet={`${topic.image}&fm=webp`} type="image/webp" />
-                            <source srcSet={topic.image} type="image/jpeg" />
-                            <img 
-                                src={topic.image} 
-                                alt={topic.title} 
-                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-                                loading="lazy"
-                                width="300"
-                                height="384"
-                            />
-                        </picture>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
-                        <div className="relative h-full flex flex-col justify-between p-6 text-white text-left">
-                            <div>
-                                <span className="text-xs font-bold uppercase tracking-wider bg-fann-charcoal/80 px-3 py-1 rounded-full border border-white/10">{topic.category}</span>
-                            </div>
-                            <div>
-                                <topic.icon size={32} className="text-fann-gold mb-3" />
-                                <h2 className="text-xl font-serif font-bold mb-4 leading-tight">{topic.title}</h2>
-                                <span className="font-semibold text-fann-gold group-hover:underline">Read the Analysis &rarr;</span>
-                            </div>
-                        </div>
-                    </motion.div>
-                ))}
-            </div>
-        </div>
-    );
-    
-    const renderArticle = () => (
-        <div className="max-w-4xl mx-auto">
-             <button onClick={handleBack} className="flex items-center gap-2 text-fann-gold mb-8 font-semibold hover:underline">
-                <ArrowLeft size={16} /> Back to Topics
-            </button>
-            <AnimatePresence>
-            {isLoading ? (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <div className="flex flex-col items-center text-center p-8">
-                        <Loader2 className="w-12 h-12 text-fann-gold animate-spin" />
-                        <h2 className="text-3xl font-serif text-white mt-6">Generating Analysis...</h2>
-                        <p className="text-gray-400 mt-2">Our proprietary knowledge base is compiling insights from across the web. This might take a moment.</p>
-                    </div>
-                </motion.div>
-            ) : error ? (
-                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="bg-red-900/50 border border-red-500 text-red-300 p-8 rounded-lg text-left">
-                    <ServerCrash className="w-12 h-12 mx-auto mb-4"/>
-                    <h2 className="text-2xl font-serif text-white mb-2 text-center">An Error Occurred</h2>
-                    <p className="whitespace-pre-wrap">{error}</p>
-                </motion.div>
-            ) : generatedArticle && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="bg-fann-charcoal-light border border-white/10 p-8 sm:p-12 rounded-lg">
-                    <h1 className="text-4xl md:text-5xl font-serif font-bold text-fann-gold mb-6">{selectedTopic?.title}</h1>
-                    <div
-                        className="prose prose-lg max-w-none text-gray-300 leading-relaxed space-y-4 prose-strong:text-white prose-headings:text-fann-gold prose-a:text-fann-gold prose-blockquote:text-white prose-blockquote:border-fann-gold"
-                        dangerouslySetInnerHTML={{ __html: formatContent(generatedArticle.content) }}
-                    />
 
-                    {generatedArticle.sources && generatedArticle.sources.length > 0 && (
-                        <div className="mt-12 border-t border-white/10 pt-6">
-                            <h3 className="text-xl font-bold text-fann-gold mb-4 flex items-center gap-2"><BookOpen size={20} /> Sources</h3>
-                             <ul className="space-y-2 list-disc list-inside">
-                                {generatedArticle.sources.map((source, index) => (
-                                    <li key={index}>
-                                        <a href={source.uri} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white hover:underline transition-colors" title={source.title}>
-                                            {source.title || new URL(source.uri).hostname}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
+            {/* Featured Blog Posts (Contractor Content) */}
+            <div className="mb-20">
+                <h2 className="text-left text-2xl font-serif font-bold text-white mb-8 flex items-center gap-3">
+                    <Newspaper className="text-fann-gold" /> Featured Articles
+                </h2>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {blogPosts.map((post) => (
+                        <motion.div 
+                            key={post.id}
+                            onClick={() => setSearchParams({ article: post.slug })}
+                            className="bg-fann-charcoal-light border border-white/10 rounded-lg overflow-hidden cursor-pointer hover:border-fann-gold transition-all"
+                        >
+                            <img src={post.image} className="w-full h-48 object-cover opacity-80" alt={post.title} />
+                            <div className="p-6 text-left">
+                                <span className="text-xs font-bold uppercase text-fann-gold">{post.category}</span>
+                                <h3 className="text-xl font-bold text-white mt-2 mb-3">{post.title}</h3>
+                                <p className="text-sm text-gray-400 line-clamp-2 mb-4">{post.excerpt}</p>
+                                <div className="flex items-center gap-4 text-[10px] text-gray-500 uppercase tracking-widest border-t border-white/5 pt-4">
+                                    <span className="flex items-center gap-1"><Calendar size={12}/> {post.date}</span>
+                                    <span className="flex items-center gap-1"><User size={12}/> {post.author}</span>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+
+            {/* AI Topics */}
+            <div className="mb-12">
+                 <h2 className="text-left text-2xl font-serif font-bold text-white mb-8 flex items-center gap-3">
+                    <BrainCircuit className="text-fann-gold" /> AI Trend Analysis
+                </h2>
+                <div className="grid md:grid-cols-3 gap-8">
+                    {insightTopics.map((topic) => (
+                        <div 
+                            key={topic.slug}
+                            onClick={() => setSearchParams({ topic: topic.slug })}
+                            className="h-64 relative rounded-lg overflow-hidden cursor-pointer group border border-white/5"
+                        >
+                            <img src={topic.image} className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110 opacity-50" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
+                            <div className="relative h-full flex flex-col justify-end p-6 text-left">
+                                <topic.icon className="text-fann-gold mb-2" size={24} />
+                                <h3 className="text-lg font-bold text-white">{topic.title}</h3>
+                            </div>
                         </div>
-                    )}
-                </motion.div>
-            )}
-            </AnimatePresence>
+                    ))}
+                </div>
+            </div>
         </div>
     );
+
+    const renderArticle = () => {
+        const title = selectedBlog?.title || selectedTopic?.title;
+        const content = selectedBlog?.content || generatedArticle?.content;
+
+        return (
+            <div className="max-w-4xl mx-auto">
+                <button onClick={() => setSearchParams({})} className="flex items-center gap-2 text-fann-gold mb-8 font-semibold hover:underline">
+                    <ArrowLeft size={16} /> Back to Hub
+                </button>
+                
+                {isLoading ? (
+                    <div className="flex flex-col items-center py-20">
+                        <Loader2 className="animate-spin text-fann-gold w-12 h-12" />
+                        <p className="mt-4 text-gray-400">Compiling Industry Insights...</p>
+                    </div>
+                ) : (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-fann-charcoal-light border border-white/10 p-8 sm:p-12 rounded-lg">
+                        <h1 className="text-4xl md:text-5xl font-serif font-bold text-fann-gold mb-6">{title}</h1>
+                        <div className="flex items-center gap-6 mb-12 text-sm text-gray-500 border-b border-white/5 pb-6">
+                            <span className="flex items-center gap-2"><User size={14}/> {selectedBlog?.author || 'FANN Intelligence'}</span>
+                            <span className="flex items-center gap-2"><Calendar size={14}/> {selectedBlog?.date || 'Real-time Analysis'}</span>
+                        </div>
+                        <div
+                            className="prose prose-lg max-w-none text-gray-300 leading-relaxed space-y-4 prose-strong:text-white prose-headings:text-fann-gold prose-a:text-fann-gold"
+                            dangerouslySetInnerHTML={{ __html: formatContent(content || '') }}
+                        />
+                    </motion.div>
+                )}
+            </div>
+        );
+    };
 
     return (
         <AnimatedPage>
-            <SEO
-                title={selectedTopic ? `${selectedTopic.title} | FANN Intelligence Hub` : "Intelligence Hub | Industry Trends & Analysis"}
-                description={
-                    selectedTopic
-                        ? `A FANN-powered analysis on ${selectedTopic.title}. Discover the latest trends in the GCC's exhibition, events, and interior design industries with FANN.`
-                        : "Access expert-driven analysis from the FANN Intelligence Hub. Stay ahead with the latest trends in exhibition design, event technology, and commercial interiors in the GCC."
-                }
-                schema={schema}
-            />
+            <SEO title="Insights & Intelligence | FANN" description="Expert analysis on UAE exhibitions, events, and interiors." />
             <div className="min-h-screen bg-fann-charcoal pt-32 pb-20 text-white">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                   {selectedTopic ? renderArticle() : renderTopicSelection()}
+                   {topicSlug || blogSlug ? renderArticle() : renderTopicSelection()}
                 </div>
             </div>
         </AnimatedPage>
