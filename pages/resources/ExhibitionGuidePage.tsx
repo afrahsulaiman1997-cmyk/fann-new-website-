@@ -550,7 +550,7 @@ const ExhibitionGuidePage: React.FC = () => {
                                         <MessageSquare className="w-8 h-8 text-fann-gold mx-auto mb-3"/>
                                         <h3 className="text-white font-bold">Need Human Help?</h3>
                                         <p className="text-xs text-gray-400 mb-4">Our project directors are ready to step in.</p>
-                                        <Link to="/contact" className="block w-full border border-white/20 hover:bg-white hover:text-black text-white py-2 rounded text-sm transition-colors">
+                                        <Link to="/book-consultation" className="block w-full border border-white/20 hover:bg-white hover:text-black text-white py-2 rounded text-sm transition-colors">
                                             Book Consultation
                                         </Link>
                                     </div>

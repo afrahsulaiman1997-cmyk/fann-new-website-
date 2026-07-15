@@ -126,7 +126,7 @@ const ModularSystemsPage: React.FC = () => {
         <p>This level of customization ensures your <strong>reusable exhibition stand</strong> always looks fresh, relevant, and perfectly aligned with your brand. Explore our <Link to="/portfolio">portfolio</Link> for inspiration.</p>
 
         <div className="my-8 text-center">
-            <Link to="/contact#consultation" className="border-2 border-fann-accent-teal dark:border-fann-gold text-fann-accent-teal dark:text-fann-gold font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider inline-block">Schedule a Consultation</Link>
+            <Link to="/book-consultation" className="border-2 border-fann-accent-teal dark:border-fann-gold text-fann-accent-teal dark:text-fann-gold font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider inline-block">Schedule a Consultation</Link>
         </div>
 
         <FaqAccordion faqs={faqs} />

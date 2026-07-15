@@ -106,14 +106,14 @@ const ServicePageLayout: React.FC<ServicePageLayoutProps> = ({
                     <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-white">Ready to Start Your Project?</h2>
                     <p className="max-w-2xl mx-auto text-gray-400 mb-8">Let's discuss how our expertise can elevate your brand. Contact us for a complimentary consultation and a detailed quote.</p>
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                        <Link to="/contact">
+                        <Link to="/book-consultation">
                             <motion.button 
                                 whileHover={{ scale: 1.05, y: -2 }}
                                 whileTap={{ scale: 0.95 }}
                                 transition={buttonTransition}
                                 className="bg-fann-gold text-fann-charcoal font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider w-full sm:w-auto"
                             >
-                                Get a Free Quote
+                                Book a Consultation
                             </motion.button>
                         </Link>
                          <Link to="/portfolio">

@@ -163,14 +163,14 @@ const ServicesPage: React.FC = () => {
                  <div className="bg-black/40 rounded-lg py-16 px-8">
                     <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-white">Have a Project in Mind?</h2>
                     <p className="max-w-2xl mx-auto text-gray-400 mb-8">Let's turn your vision into a reality. Contact us today for a complimentary consultation with our design experts.</p>
-                    <Link to="/contact">
+                    <Link to="/book-consultation">
                         <motion.button 
                             whileHover={{ scale: 1.05, y: -2 }}
                             whileTap={{ scale: 0.95 }}
                             transition={buttonTransition}
                             className="bg-fann-gold text-fann-charcoal font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-fann-gold/40"
                         >
-                            Get a Free Quote
+                            Book a Consultation
                         </motion.button>
                     </Link>
                  </div>

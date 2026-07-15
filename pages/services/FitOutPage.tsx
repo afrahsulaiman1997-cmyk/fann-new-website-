@@ -88,7 +88,7 @@ const FitOutPage: React.FC = () => {
         <p>While stand fabrication creates the 'bones' of your exhibition stand, the <strong>interior fit-out</strong> provides its soul. This crucial phase involves transforming the raw, constructed space into a fully functional, aesthetically complete, and brand-aligned environment. It encompasses all the finishing touches that engage the senses and create a professional atmosphere, from the floor underfoot to the light that illuminates your products. As a premier provider of <strong>interior fit-out services in Dubai</strong>, FANN ensures every surface and detail is executed to perfection, creating a polished and welcoming space for your visitors.</p>
 
         <div className="my-8 text-center">
-            <Link to="/contact" className="bg-fann-gold text-fann-charcoal font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider inline-block">Get a Fit-Out Consultation</Link>
+            <Link to="/book-consultation" className="bg-fann-gold text-fann-charcoal font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider inline-block">Get a Fit-Out Consultation</Link>
         </div>
 
         <h2>Our Fit-Out Services: From Design to Completion</h2>
